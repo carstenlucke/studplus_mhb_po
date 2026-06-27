@@ -51,19 +51,28 @@ Arbeitsverzeichnis** (Scratchpad), **nicht** ins Repo. Ins Repo kommen nur `READ
 
 1. **PDF prüfen:** `pdfinfo "<pdf>"` → Seitenzahl, Titel, Fassung/Version notieren.
 2. **Volltext extrahieren:** `pdftotext -layout "<pdf>" full_layout.txt`.
-   Die `pdftotext`-Ausgabe erfasst **die Ankreuz-Checkboxen zuverlässig** (`☒` = gesetzt,
-   `☐` = leer). Diese sind für Pflicht/Wahlpflicht, Fachrichtung, Sprache, Dauer, Häufigkeit,
-   Bonuspunkte und Lehrveranstaltungsart **maßgeblich**.
-3. **Seitenbilder rendern:** `pdftoppm -png -r 130 "<pdf>" img/page` → `page-01.png` … nur als
-   Rückfallebene, wenn ein Feld im Text unleserlich/mehrdeutig ist.
-4. **Module finden & Manifest bauen:** `grep -n -A2 "^Modulcode" full_layout.txt`.
-   **Nicht** das Inhaltsverzeichnis zur Modulauflistung verwenden — es ist erfahrungsgemäß oft
-   **veraltet/unvollständig** (listet nicht alle Module, falsche Seitenzahlen). Maßgeblich für die
-   Vollständigkeit ist die Zahl der `Modulcode`-Vorkommen im Modulteil, nicht das Verzeichnis.
+   Bei **manchen** Handbüchern erfasst `pdftotext` die Ankreuz-Checkboxen als Glyphen (`☒` = gesetzt,
+   `☐` = leer) — dann sind sie für Pflicht/Wahlpflicht, Fachrichtung, Sprache, Dauer, Häufigkeit,
+   Bonuspunkte und Lehrveranstaltungsart **maßgeblich**. **ABER:** das ist NICHT garantiert.
+   **Immer zuerst prüfen:** `grep -c "☒\|☐" full_layout.txt`. Ist das Ergebnis **0**, fehlen die
+   Checkboxen im Text → die betroffenen Felder **müssen aus den Seitenbildern** gelesen werden
+   (siehe §8). In diesem Fall die Modul-Agenten explizit anweisen, Ankreuzfelder am Bild zu lesen.
+   SWS-Zahlenwerte (z. B. „0 SWS 4 SWS …") stehen i. d. R. trotzdem im Text.
+3. **Seitenbilder rendern:** `pdftoppm -png -r 130 "<pdf>" img/page` → `page-01.png`/`page-001.png`
+   (3-stellig ab 100 Seiten). Pflicht-Rückfallebene für unleserliche/mehrdeutige Felder — und
+   **obligatorisch** für alle Checkbox-Felder, wenn Schritt 2 keine Glyphen findet.
+4. **Module finden & Manifest bauen:** `grep -n "^[[:space:]]*Modulcode" full_layout.txt`
+   (bzw. in Python `l.lstrip().startswith("Modulcode")`). **Wichtig:** `Modulcode`-Zeilen sind
+   manchmal **eingerückt** — ein striktes `^Modulcode` übersieht sie und bündelt fremde Module in
+   Nachbar-Slices! Gegenprobe: `grep -c "Modulcode"` (irgendwo in Zeile) muss zur Zahl der erkannten
+   Modulstarts passen. **Nicht** das Inhaltsverzeichnis zur Modulauflistung verwenden — es ist oft
+   **veraltet/unvollständig**. Maßgeblich ist die Zahl der `Modulcode`-Vorkommen im Modulteil; zur
+   Plausibilisierung zusätzlich gegen den Web-Verlaufsplan zählen.
    Jedes Modul beginnt mit `Modulcode`; das Modul endet eine Zeile vor dem nächsten `Modulcode`
    (letztes Modul: Dateiende). Daraus ein **Manifest** je Modul:
    `code, slug, titel_de, startzeile, endzeile, modultyp, fachrichtungen, studiensemester,
    pdf_seiten`. Die PDF-Seiten je Modul über die Form-Feed-Zeichen (`\f`) im Layout-Text zählen.
+   Codes müssen nicht numerisch/eindeutig sein (z. B. wörtlich `NEU`, Doppelcodes wie `80001/80002`).
 5. **Klassifikation gegen die Webseite gegenprüfen** (Pflicht vs. Wahlpflicht, Fachsemester,
    Fachrichtungs-Zuordnung). Studiengangsseite + Unterseiten der Fachrichtungen abrufen; die
    aufklappbaren **Studienverlaufspläne** stecken im HTML. Beispiel Prozessmanagement:
@@ -80,11 +89,19 @@ Arbeitsverzeichnis** (Scratchpad), **nicht** ins Repo. Ins Repo kommen nur `READ
      die Vorlage aus §4**, schreibt `module/<code>-<slug>.md` und gibt nur eine **kompakte
      Zusammenfassung** + Anomalien zurück (`schema`-validiert). Die Vorlage wird **einmal** im
      Skript definiert und an **alle** Agenten identisch übergeben → garantierte Konsistenz.
-   - Autoritative Felder (`modulcode`, `titel_de`, `modultyp`, `fachrichtungen`, `studiensemester`)
-     aus dem geprüften Manifest als **fix** an die Agenten geben, Rest extrahieren sie aus dem Text.
+   - Autoritative Felder (`modulcode`, `titel_de`, `modultyp`, `studiensemester`; bei Text-Checkboxen
+     auch `fachrichtungen`) aus dem geprüften Manifest als **fix** an die Agenten geben, Rest
+     extrahieren sie aus Text bzw. Bild. Sind die Checkboxen nur im Bild (§8), lesen die Agenten
+     `fachrichtungen` selbst aus dem Seitenbild.
+   - **Manifest im Skript einbetten, NICHT über `Workflow`-`args`:** Der `args`-Wert kommt im Skript
+     u. U. nicht als Array an (`MODULES.map is not a function`). Das Manifest-Array direkt als
+     JS-Literal in den Skripttext schreiben (oder defensiv `JSON.parse`). Bei vielen Modulen das
+     kompakte Array per Skript erzeugen und in den Workflow-Skripttext einsetzen.
 8. **Index & Rohmaterial:** `README.md` schreiben (siehe §6) und Quell-PDF nach `quellen/` kopieren.
-9. **Validieren** (§7): Frontmatter-/Sektions-Check über alle Dateien **und** CrP-Summen je
-   Fachrichtung gegen die Soll-Gesamtsumme (typ. 3 × 30 = **90 CrP**) prüfen.
+9. **Validieren** (§7): Frontmatter-/Sektions-Check über alle Dateien; Dateizahl == Modulanzahl;
+   **CrP-Plausibilität** gegen die Soll-Gesamtsumme des Studiengangs (Master Prozessmanagement:
+   3 × 30 = **90**; Bachelor Softwaretechnologie: 7 Semester = **210**, mit vertiefungsabhängigem
+   Pfad). Geht es nicht auf → Modulbestand/Klassifikation prüfen.
 
 ---
 
@@ -188,8 +205,11 @@ sws:
 
 - **Wortgetreu & vollständig.** Inhalte, Listen und Kompetenztexte vollständig übernehmen, nicht
   kürzen, nicht paraphrasieren.
-- **Checkboxen sind maßgeblich.** `☒` = gesetzt, `☐` = leer. Daraus Pflicht/Wahlpflicht (über
-  „Verwendbarkeit"), Fachrichtung, Sprache, Dauer, Häufigkeit, Bonuspunkte, Lehrveranstaltungsart.
+- **Checkboxen sind maßgeblich** — aber **Quelle je Handbuch prüfen!** `☒` = gesetzt, `☐` = leer.
+  Daraus Pflicht/Wahlpflicht (über „Verwendbarkeit"), Fachrichtung/Vertiefung, Sprache, Dauer,
+  Häufigkeit, Bonuspunkte, Lehrveranstaltungsart. Stehen die Glyphen **nicht** im Textextrakt
+  (`grep -c "☒\|☐"` = 0), sind diese Felder **ausschließlich aus den Seitenbildern** zu lesen; die
+  Agenten dann explizit darauf hinweisen (und dass pro Seite mehrere Module stehen können).
 - **OCR-/Trennungsfehler** (Silbentrennung am Zeilenumbruch, fehlende/überzählige Leerzeichen)
   behutsam korrigieren. **Inhaltliche Eigenheiten/Tippfehler des Originals bleiben erhalten** –
   im Zweifel wörtlich übernehmen und als Anomalie melden.
@@ -228,6 +248,33 @@ sws:
 
 ## 8. Bekannte Stolperfallen
 
+- **Eingerückte `Modulcode`-Zeilen:** In manchen Handbüchern beginnt die `Modulcode`-Zeile **nicht**
+  in Spalte 0. Ein striktes `^Modulcode` übersieht solche Module, deren Inhalt dann in das
+  vorherige Modul-Slice „durchsickert" (Agenten melden „fremde Module auf der Seite"). Immer
+  einrückungstolerant matchen (`^[[:space:]]*Modulcode` / `lstrip().startswith`) und die Trefferzahl
+  gegen `grep -c "Modulcode"` und den Web-Verlaufsplan gegenprüfen. _(Konkret aufgetreten: SWT-B.Sc.
+  hatte 47 statt vermeintlich 41 Module.)_
+- **Checkboxen fehlen im Textextrakt:** Je nach PDF rendert `pdftotext` die `☒/☐`-Glyphen gar nicht
+  (`grep -c "☒\|☐"` = 0). Dann Fachrichtung/Vertiefung, Sprache, Dauer, Häufigkeit, Bonuspunkte und
+  Lehrveranstaltungsart **aus den Seitenbildern** lesen lassen. SWS-Zahlen stehen meist trotzdem im
+  Text.
+- **Mehrere Module pro Seite / Modulgrenzen mitten auf der Seite:** Beim Bild-Lesen genau auf den
+  Block des eigenen Moduls achten (beginnt mit dessen Modulcode/Modulbezeichnung); Felder von
+  Nachbarmodulen ignorieren.
+- **Nicht-numerische/doppelte Modulcodes:** Codes können wörtlich `NEU` lauten (noch nicht final
+  vergeben) oder doppelt sein (z. B. `80001/80002` für ein über zwei Semester laufendes Modul, oder
+  derselbe Code für zwei verschiedene Module). Codes für Dateinamen sanitisieren (`/`→`-`), Kollision
+  über unterschiedliche Slugs auflösen und im README dokumentieren.
+- **Vertiefungsspezifische Pflichtmodule:** „Pflichtmodul" heißt nicht zwingend „für alle
+  Fachrichtungen". Manche Pflichtmodule sind nur in **einer** Vertiefung angekreuzt — `fachrichtungen`
+  modulgenau aus der Quelle übernehmen, nicht pauschal „alle" setzen.
+- **`Workflow`-`args` nicht als Array:** Manifest direkt im Skript einbetten statt über `args`
+  übergeben (siehe §3 Schritt 7).
+- **Studiengangsname variiert** (z. B. „Softwaretechnik" vs. „Softwaretechnologie"): kanonische Form
+  festlegen, Abweichung notieren.
+- **Bachelor ≠ Master:** mehr Semester (oft 7), höhere CrP-Gesamtsumme (z. B. 210), „Fachrichtungen"
+  heißen ggf. „Vertiefungsrichtungen", Praxisphasen/Projektstudium/Thesis mit Sonder-CrP und teils
+  ohne Präsenz-SWS; Semesterangaben können Bereiche sein (`1./2.`, `3./4.`).
 - **Inhaltsverzeichnis ist unzuverlässig:** Das TOC im PDF ist nicht immer aktuell/aussagekräftig
   und listet häufig **nicht alle** Module (bzw. mit falschen Seitenzahlen). Modulbestand,
   Reihenfolge und Seiten daher **immer** aus den `Modulcode`-Vorkommen im Modulteil ableiten,

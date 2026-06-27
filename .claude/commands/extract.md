@@ -25,13 +25,21 @@ die Datei existiert (`pdfinfo "$1"`).
    `pdftotext -layout "$1" full_layout.txt` · `pdftoppm -png -r 130 "$1" img/page`.
    Die Checkbox-Zeichen `☒`/`☐` im Text sind **maßgeblich** (§5).
 
-3. **Module + Manifest:** `grep -n -A2 "^Modulcode" full_layout.txt`; Modulgrenzen = von `Modulcode`
-   bis vor das nächste `Modulcode`. Manifest je Modul bauen (`code, slug, titel_de, zeilen,
-   modultyp, fachrichtungen, studiensemester, pdf_seiten`) und Text in `modtext/<code>-<slug>.txt`
-   splitten (Form-Feeds entfernen).
+   **Checkbox-Check:** `grep -c "☒\|☐" full_layout.txt`. Ergebnis **0** → Checkboxen fehlen im Text;
+   alle Ankreuzfelder müssen aus den Seitenbildern gelesen werden (Agenten entsprechend anweisen).
+
+3. **Module + Manifest:** `grep -n "^[[:space:]]*Modulcode" full_layout.txt` (einrückungstolerant —
+   striktes `^Modulcode` übersieht eingerückte Codes!). Trefferzahl gegen `grep -c "Modulcode"` und
+   den Web-Verlauf gegenprüfen. Modulgrenzen = von `Modulcode` bis vor das nächste `Modulcode`.
+   Manifest je Modul bauen (`code, slug, titel_de, zeilen, modultyp, studiensemester, pdf_seiten`;
+   `fachrichtungen` nur wenn Checkboxen im Text, sonst von Agenten aus Bild) und Text in
+   `modtext/<code>-<slug>.txt` splitten (Form-Feeds entfernen). Codes für Dateinamen sanitisieren
+   (`/`→`-`; auch `NEU`/Doppelcodes möglich).
 
 4. **Klassifikation prüfen:**
-   - Pflicht/Wahlpflicht, Fachrichtung, Semester primär aus den PDF-Checkboxen („Verwendbarkeit").
+   - Pflicht/Wahlpflicht, Fachrichtung, Semester primär aus den PDF-Checkboxen („Verwendbarkeit");
+     fehlen die Checkboxen im Text, aus den Seitenbildern. „Pflichtmodul" ≠ zwingend „alle
+     Fachrichtungen" (vertiefungsspezifische Pflichtmodule kommen vor).
    - **Falls `$2` angegeben:** die Seite (und ggf. die Fachrichtungs-Unterseiten) abrufen, die
      aufklappbaren Verlaufspläne extrahieren und gegen die PDF-Klassifikation cross-checken;
      Abweichungen dokumentieren.
@@ -45,7 +53,10 @@ die Datei existiert (`pdfinfo "$1"`).
      CLAUDE.md §4**, schreibt `module/<code>-<slug>.md`, gibt nur kompakte Zusammenfassung +
      Anomalien zurück (`schema`-validiert). Vorlage **einmal** im Skript definieren und an **alle**
      Agenten identisch übergeben. Autoritative Felder (`modulcode`, `titel_de`, `modultyp`,
-     `fachrichtungen`, `studiensemester`) aus dem geprüften Manifest fix vorgeben.
+     `studiensemester`; `fachrichtungen` nur bei Text-Checkboxen) aus dem geprüften Manifest fix
+     vorgeben.
+   - **Manifest direkt im Workflow-Skript einbetten** (JS-Literal), NICHT über `args` — `args` kommt
+     u. U. nicht als Array an.
 
 6. **Index & Rohmaterial:** `README.md` mit den Pflichtinhalten aus §6 schreiben (Verlaufspläne je
    Fachrichtung mit CrP-Summen, Pflicht-/Wahlpflicht-Tabellen, Datenqualitäts-Hinweise) und das
@@ -57,9 +68,10 @@ die Datei existiert (`pdfinfo "$1"`).
 ## Beachte
 - Inhalte **wortgetreu & vollständig**; nur OCR-/Trennungsfehler behutsam korrigieren; Original-
   Eigenheiten erhalten; fehlende Abschnitte weglassen — nichts erfinden (§5).
-- **Bekannte Stolperfallen (§8):** doppelte Modulcodes (getrennte Dateien + Hinweis), Wahlpflicht
-  ohne Fachrichtungs-Checkboxen, mehrere Kreuze in der KapVO-Zeile, Projektphasen/Thesis,
-  Web-/PDF-Schreibvarianten.
+- **Bekannte Stolperfallen (§8):** eingerückte `Modulcode`-Zeilen (sonst Module übersehen!),
+  Checkboxen nur im Bild, mehrere Module pro Seite, doppelte/nicht-numerische Codes (`NEU`,
+  `80001/80002`), vertiefungsspezifische Pflichtmodule, `Workflow`-`args`, Web-/PDF-Schreibvarianten,
+  Bachelor ≠ Master (mehr Semester, andere CrP-Summe).
 
 Abschließend: kurze Zusammenfassung (Anzahl Module, Pfad zum `README.md`, offene Datenqualitäts-
 Punkte).
