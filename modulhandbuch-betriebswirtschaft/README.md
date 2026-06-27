@@ -363,16 +363,16 @@ System") blieben erhalten. Strukturell relevante Punkte:
   Die reine Textextraktion (`pdftotext`) enthält **keine** `☒`/`☐`-Zeichen. Pflicht/Wahlpflicht und
   Studiensemester stehen als Klartext im Text; **Fachrichtung, Sprache, Dauer, Häufigkeit,
   Bonuspunkte** und die angekreuzte **Lehrveranstaltungsart** wurden aus den gerenderten
-  Seitenbildern (150 dpi) gelesen. Die SWS-Zahlenwerte selbst stehen im Text.
+  Seitenbildern (150 dpi) gelesen. Die SWS-Zahlenwerte selbst stehen im Text. ([Issue #8](https://github.com/carstenlucke/studplus_mhb_po/issues/8))
 - **Doppelter Modulcode 7005:** zweifach vergeben — für *Verwaltungsverfahren, Schadenersatz,
   Organisation* (Pflichtmodul, 7. Sem., Krankenversicherungsmanagement) **und** für *Intercultural
   Competence in English* (Wahlpflichtmodul, 5. Sem.). Beide sind als getrennte Dateien abgelegt
-  (`7005-verwaltungsverfahren-…`, `7005-intercultural-competence-in-english`).
+  (`7005-verwaltungsverfahren-…`, `7005-intercultural-competence-in-english`). ([Issue #2](https://github.com/carstenlucke/studplus_mhb_po/issues/2))
 - **Sammel-/Doppelcode `80001/80002`:** Das Modul *Coaching-Selbstkompetenz* trägt im PDF den
   kombinierten Code `80001/80002` (4 CrP, läuft über 1.–2. Semester; auf den Fachrichtungs-Webseiten
   als „Coaching-Selbstkompetenz Teil 1/Teil 2" geführt). Dateiname: `80001-80002-coaching-selbstkompetenz.md`.
 - **Modulcode im Text fehlend:** Beim Modul *Businessplan* fehlte der Code in der Textebene; aus dem
-  Seitenbild als **7202** gelesen.
+  Seitenbild als **7202** gelesen. ([Issue #4](https://github.com/carstenlucke/studplus_mhb_po/issues/4))
 - **Wahlpflichtmodule ohne Fachrichtungs-Kreuz (5022, 7005, 7018, 7037):** In der „Verwendbarkeit"
   ist nur „Wahlpflichtmodul …" ohne Fachrichtungs-Ankreuzung gesetzt → für den gesamten
   Wahlpflichtbereich (alle Fachrichtungen) wählbar.
@@ -387,7 +387,7 @@ System") blieben erhalten. Strukturell relevante Punkte:
 - **Web ↔ PDF:** Die Studienverlaufspläne der Webseiten bestätigen die Semesterlage und die
   fachrichtungsspezifischen Module. Abweichungen: Die Webseite **splittet** *Versicherungs-,
   Beitrags- und Leistungswesen* (4303) in „Versicherungs- & Beitragswesen" (Sem. 4) und
-  „Leistungswesen" (Sem. 5); maßgeblich ist die **PDF-Schreibweise/Semesterlage** (ein Modul, 4. Sem.).
+  „Leistungswesen" (Sem. 5); maßgeblich ist die **PDF-Schreibweise/Semesterlage** (ein Modul, 4. Sem.). ([Issue #9](https://github.com/carstenlucke/studplus_mhb_po/issues/9))
   Einzelne Modulnamen sind auf der Webseite abgekürzt (z.B. „Wirtschaftsinformatik 1" statt
   „Wirtschaftsinformatik 1: Werkzeuge und Systeme der Bürokommunikation").
 - **CrP-Plausibilität:** Je Fachrichtung summieren sich die Pflichtmodule auf **185 CrP**; mit dem

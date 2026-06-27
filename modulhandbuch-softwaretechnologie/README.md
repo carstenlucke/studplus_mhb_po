@@ -136,12 +136,13 @@ Im 5. Semester werden Wahlpflichtmodule (je 5 CrP) belegt. Die Spalte **Vertiefu
 
 Inhalte wurden möglichst wortgetreu übernommen; offensichtliche OCR-/Trennungsfehler wurden behutsam korrigiert, inhaltliche Eigenheiten des Originals blieben erhalten. Besonderheiten:
 
-- **Ankreuzfelder aus Seitenbildern:** In diesem PDF sind die Checkbox-Zeichen (☒/☐) nicht im Textextrakt enthalten. `fachrichtungen`, `sprache`, `dauer_semester`, `haeufigkeit`, `bonuspunkte` und die angekreuzte `lehrveranstaltungsart` wurden daher aus den gerenderten Seitenbildern gelesen.
+- **Ankreuzfelder aus Seitenbildern:** In diesem PDF sind die Checkbox-Zeichen (☒/☐) nicht im Textextrakt enthalten. `fachrichtungen`, `sprache`, `dauer_semester`, `haeufigkeit`, `bonuspunkte` und die angekreuzte `lehrveranstaltungsart` wurden daher aus den gerenderten Seitenbildern gelesen. ([Issue #8](https://github.com/carstenlucke/studplus_mhb_po/issues/8))
 - **Vertiefungsspezifische Pflichtmodule:** Nicht alle Pflichtmodule gelten für alle Vertiefungen (z. B. *Entwicklung grafischer Bedieneroberflächen* (3007) nur Softwareentwicklung; *Statistische Grundlagen des Machine Learning* (3005) nur Data Science; *Management der Informationssicherheit* (3006) nur IT-Security).
-- **Modulcode "NEU":** Das Modul *Rechtliche Aspekte der Informationstechnologie* trägt im PDF wörtlich den Code „NEU" (noch kein finaler Modulcode vergeben).
+- **Modulcode "NEU":** Das Modul *Rechtliche Aspekte der Informationstechnologie* trägt im PDF wörtlich den Code „NEU" (noch kein finaler Modulcode vergeben). ([Issue #3](https://github.com/carstenlucke/studplus_mhb_po/issues/3))
 - **Doppelcode 80001/80002:** *Coaching-Selbstkompetenz* wird über das 1. + 2. Semester geführt (zwei Teilcodes, eine Modulbeschreibung).
-- **Schreibvariante:** Der Studiengang heißt im PDF teils „Softwaretechnik" statt „Softwaretechnologie"; maßgeblich ist „Softwaretechnologie (B.Sc.)".
+- **Schreibvariante:** Der Studiengang heißt im PDF teils „Softwaretechnik" statt „Softwaretechnologie"; maßgeblich ist „Softwaretechnologie (B.Sc.)". ([Issue #6](https://github.com/carstenlucke/studplus_mhb_po/issues/6))
 - **Abweichende Prüfungsformen:** Einige Module weichen ab (z. B. *Case Studies* (7001) und *Projektstudium* (6000) mit „Anwesenheit"/unbenotet); siehe jeweilige Moduldatei.
+- **Vollständigkeit (47 Module):** 6 Module mit eingerückter `Modulcode`-Zeile wurden bei der Extraktion zunächst übersehen und nachträglich ergänzt — alle 47 sind vorhanden und validiert ([Issue #7](https://github.com/carstenlucke/studplus_mhb_po/issues/7)).
 - **Web-Angaben** (Modulnamen, SWS, CP auf der Studiengangsseite) dienen nur der Orientierung; maßgeblich sind die Werte aus dem Modulhandbuch.
 
 ---

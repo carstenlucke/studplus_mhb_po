@@ -154,15 +154,15 @@ OCR-/Silbentrennungsfehler wurden behutsam korrigiert; inhaltliche Eigenheiten d
   *Vertiefung des Prozessmanagements* **und** für *Optimierung komplexer Systeme unter Einsatz von
   MSR-Techniken*. In der Fachrichtung *Technische Prozesse* werden im 2. Semester laut Verlaufsplan
   **beide** Module geführt. Dies ist eine Inkonsistenz der Quelldokumentation; beide Module sind
-  hier als getrennte Dateien abgebildet.
+  hier als getrennte Dateien abgebildet. ([Issue #1](https://github.com/carstenlucke/studplus_mhb_po/issues/1))
 - **Projektphasen / Master-Thesis** sind „Coaching"/projektorientierte Module ohne Präsenz-SWS
   (Projektphase 1 & 2: je 10 CrP, 250 h; Master-Thesis + Kolloquium: 20 CrP, 500 h). Bei
-  *Projektphase 2* ist im PDF keine Lehrveranstaltungsart nach KapVO angekreuzt.
+  *Projektphase 2* ist im PDF keine Lehrveranstaltungsart nach KapVO angekreuzt. ([Issue #5](https://github.com/carstenlucke/studplus_mhb_po/issues/5))
 - **Vertiefung Controlling (4011):** Im PDF sind sowohl „Seminar" als auch „Thesis" markiert;
   maßgeblich (SWS-tragend) ist Seminar (4 SWS) — das Thesis-Kreuz ist vermutlich ein
-  versehentlicher Marker.
+  versehentlicher Marker. ([Issue #5](https://github.com/carstenlucke/studplus_mhb_po/issues/5))
 - **Ethik und interkulturelle Kompetenz (4020):** Als Prüfungsleistung ist ausschließlich
-  „Anwesenheit (100 %)" angegeben.
+  „Anwesenheit (100 %)" angegeben. ([Issue #5](https://github.com/carstenlucke/studplus_mhb_po/issues/5))
 - Die Webseite der Fachrichtung *Technische Prozesse* schreibt „Human **Ressource** Management";
   maßgeblich ist die Modulhandbuch-Schreibweise „Human Resource Management".
 
