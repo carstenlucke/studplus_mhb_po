@@ -69,7 +69,11 @@ Die Extraktion ist als wiederverwendbares Verfahren dokumentiert:
 Die Inhalte werden möglichst wortgetreu übernommen; Ankreuzfelder werden – je nach PDF – aus dem
 Text oder aus gerenderten Seitenbildern gelesen. Jede Modul-Datei wird gegen ein festes Schema
 validiert; CrP-Summen werden je Fachrichtung plausibilisiert. Strukturrelevante Auffälligkeiten sind
-im jeweiligen Studiengangs-`README.md` unter „Hinweise zur Datenqualität" dokumentiert.
+im jeweiligen Studiengangs-`README.md` unter „Hinweise zur Datenqualität" dokumentiert und
+zusätzlich als GitHub-Issues im Milestone
+**[Datenqualität](https://github.com/carstenlucke/studplus_mhb_po/milestone/1)** nachverfolgt
+(Unstimmigkeiten im Quell-PDF und Caveats des Extraktionsverfahrens, je mit betroffenen Dateien und
+To-do).
 
 ## Quellen & Hinweise
 
